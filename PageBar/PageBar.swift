@@ -102,10 +102,10 @@ struct PageItemPreferenceKey: PreferenceKey {
 
 
 struct PageBar_Previews: PreviewProvider {
-
+    
     static var previews: some View {
         VStack {
-            PageBar(currentIndex: .constant(1), items: [PageBar.Item.init(title: "fdfd")])
+            PageBar(currentIndex: .constant(6), items: Store.share.items.map(\.title).map(PageBar.Item.init(title:)))
             Spacer()
         }
 

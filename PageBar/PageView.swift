@@ -33,7 +33,8 @@ struct PageView<Page: View & Identifiable>: View {
 }
 
 struct PageView_Previews: PreviewProvider {
+    
     static var previews: some View {
-        PageView(currentPage: .constant(1), pages: [Page(id: Store.share.items.first!.id, model: Store.share.items.first!)])
+        PageView(currentPage: .constant(6), pages: Store.share.items.map {Page(id: $0.id, model: $0)})
     }
 }

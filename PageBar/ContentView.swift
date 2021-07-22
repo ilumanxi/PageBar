@@ -8,19 +8,14 @@
 import SwiftUI
 
 struct Page: View, Identifiable {
-    
-    var id: UUID
-    
-    var model: Model
-      
+    let id: UUID
+    let model: Model
     var body: some View {
         ZStack {
             Color.random
-            
             Text("\(model.title)")
                 .foregroundColor(.primary)
                 .font(.title)
-           
         }
     }
 }
