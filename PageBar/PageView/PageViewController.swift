@@ -82,6 +82,6 @@ struct PageViewController<Page: View>: UIViewControllerRepresentable {
 struct PageViewController_Previews: PreviewProvider {
 
     static var previews: some View {
-        PageViewController(pages: Store.share.items.map {Page(id: $0.id, model: $0)}, currentPage: .constant(6))
+        PageViewController(pages: Store.share.items.map {Page(id: $0.id, model: $0)}, currentPage: .constant(Int.random(in: 0..<Store.share.items.count)))
     }
 }

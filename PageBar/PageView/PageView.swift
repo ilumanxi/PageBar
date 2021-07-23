@@ -9,19 +9,19 @@ import SwiftUI
 
 struct PageView<Page: View>: View {
     var pages: [Page]
-    @State private var currentPage = 0
-
+    @Binding var currentPage: Int
     var body: some View {
-        ZStack(alignment: .bottom) {
-            PageViewController(pages: pages, currentPage: $currentPage)
-            PageControl(numberOfPages: pages.count, currentPage: $currentPage)
-                .frame(width: CGFloat(pages.count * 18))
+        TabView(selection: $currentPage) {
+            ForEach(pages.indices) { index in
+                pages[index]
+            }
         }
+        .tabViewStyle(.page(indexDisplayMode: .never))
     }
 }
 
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
-        PageView(pages: Store.share.items.map {Page(id: $0.id, model: $0)})
+        PageView(pages: Store.share.items.map {Page(id: $0.id, model: $0)}, currentPage: .constant(Int.random(in: 0..<Store.share.items.count)))
     }
 }

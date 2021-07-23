@@ -18,12 +18,8 @@ struct Page: View, Identifiable {
     let id: UUID
     let model: Model
     var body: some View {
-        ZStack {
-            Color.random
-            Text("\(model.title)")
-                .foregroundColor(.primary)
-                .font(.title)
-        }
+        Text("\(model.title)")
+            .font(.title)
     }
 }
 
@@ -39,14 +35,16 @@ struct ContentView: View {
         }
     }
     
-    var items: [PageBar.Item]{
-        store.items.map {
-            PageBar.Item(title: $0.title)
-        }
+    var items: [PageBarItem]{
+        store.items.map(\.title).map(PageBarItem.init(title:))
     }
     
     var pageBar: some View {
-        PageBar(currentIndex: $currentPage, items: items)
+        PageBar(items: items, currentIndex: $currentPage)
+    }
+    
+    var pageView: some View {
+        PageView(pages: pages, currentPage: $currentPage)
     }
     
     var pageViewController: some View {
@@ -54,7 +52,7 @@ struct ContentView: View {
     }
     
     var body: some View {
-        pageViewController
+        pageView
             .overlay(pageBar, alignment: .top)
     }
 }
