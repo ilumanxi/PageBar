@@ -7,6 +7,13 @@
 
 import SwiftUI
 
+extension Color {
+    
+    static var random: Color {
+        Color(.sRGBLinear, red: Double.random(in: 0...1.0), green: Double.random(in: 0...1.0), blue: Double.random(in: 0...1.0), opacity: 1.0)
+    }
+}
+
 struct Page: View, Identifiable {
     let id: UUID
     let model: Model
@@ -38,8 +45,17 @@ struct ContentView: View {
         }
     }
     
+    var pageBar: some View {
+        PageBar(currentIndex: $currentPage, items: items)
+    }
+    
+    var pageViewController: some View {
+        PageViewController(pages: pages, currentPage: $currentPage)
+    }
+    
     var body: some View {
-        PageController(currentPage: $currentPage, pages: pages, items: items)
+        pageViewController
+            .overlay(pageBar, alignment: .top)
     }
 }
 

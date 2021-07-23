@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PageBar: View {
     
-    public struct Item {
+    public struct Item: Equatable, Hashable {
         let title: String
     }
     
@@ -21,7 +21,7 @@ struct PageBar: View {
         var body: some View {
             Text(item.title)
                 .scaleEffect(isSelected ? 1.5 : 1.0)
-                .font(.title3)
+                .font(.subheadline)
                 .foregroundColor(isSelected ? .primary : .secondary)
                 .padding(.all, 10)
                 .anchorPreference(key: PageItemPreferenceKey.self, value: .bounds) { [.init(pageItem: item, bounds: $0)] }
@@ -40,12 +40,13 @@ struct PageBar: View {
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 0) {
-                        ForEach(items, id:  \.title) { item in
-                            ItemView(item: item, isSelected: item.title == items[currentIndex].title )
-                                .id(item.title)
+                        ForEach(items.indices) { index in
+                            let item = items[index]
+                            ItemView(item: item, isSelected: item == items[currentIndex])
+                                .id(item)
                                 .onTapGesture {
                                     withAnimation {
-                                        self.currentIndex = items.firstIndex{$0.title == item.title}!
+                                        self.currentIndex = index
                                     }
                                 }
                         }
@@ -56,9 +57,9 @@ struct PageBar: View {
                         self.createBottomLine(proxy, preferences: preferences)
                     }
                 }
-                .onReceive(currentIndex.description.publisher) { index in
+                .onChange(of: currentIndex) { index in
                     withAnimation {
-                        proxy.scrollTo(items[currentIndex].title, anchor: .center)
+                        proxy.scrollTo(items[index], anchor: .center)
                     }
                 }
             }
@@ -105,7 +106,7 @@ struct PageBar_Previews: PreviewProvider {
     
     static var previews: some View {
         VStack {
-            PageBar(currentIndex: .constant(6), items: Store.share.items.map(\.title).map(PageBar.Item.init(title:)))
+            PageBar(currentIndex: .constant(3), items: Store.share.items.map(\.title).map(PageBar.Item.init(title:)))
             Spacer()
         }
 
