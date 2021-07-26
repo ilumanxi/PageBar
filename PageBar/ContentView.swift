@@ -41,6 +41,7 @@ struct ContentView: View {
     
     var pageBar: some View {
         PageBar(items: items, currentIndex: $currentPage)
+            .controlSize(.small)
     }
     
     var pageView: some View {
@@ -52,8 +53,12 @@ struct ContentView: View {
     }
     
     var body: some View {
-        pageView
-            .overlay(pageBar, alignment: .top)
+        NavigationView {
+            pageView
+                .overlay(pageBar, alignment: .top)
+                .navigationBarTitle("PageBar")
+                .navigationBarTitleDisplayMode(.inline)
+        }
     }
 }
 
